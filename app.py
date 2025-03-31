@@ -70,6 +70,29 @@ def hero_powers():
         hero_id=data['hero_id'],
         power_id=data['power_id']
     )
+
+
+@app.route('/heroes/<int:id>', methods=['PATCH'])
+def update_hero(id):
+    hero = Hero.query.get(id)
+    data = request.json
+    if 'name' in data: 
+        hero.name = data['name']
+    if 'super_name' in data:
+        hero.super_name = data['super_name']
+    db.session.commit()
+    return jsonify({'id': hero.id, 'name': hero.name, 'super_name': hero.super_name})
+
+@app.route('/powers/<int:id>', methods=['PATCH'])
+def update_power(id):
+    power = Power.query.get(id)
+    data = request.json
+    if 'name' in data:
+        power.name = data['name']
+    if 'description' in data:
+        power.description = data['description']
+    db.session.commit()
+    return jsonify({'id': power.id, 'name': power.name, 'description': power.description})
     db.session.add(hero_power)
     db.session.commit()
     return jsonify({'id': hero_power.id, 'hero_id': hero_power.hero_id, 'power_id': hero_power.power_id, 'strength': hero_power.strength})
